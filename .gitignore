@@ -10,3 +10,5 @@
 *.exe
 *.dll
 .direnv/
+__pycache__/
+*.pyc
