@@ -1,4 +1,5 @@
 #include "shim.h"
+#include <string.h>
 
 static uintptr_t module_text_base(HMODULE mod, size_t* size_out)
 {

@@ -1,4 +1,5 @@
 #include "shim.h"
+#include <string.h>
 
 extern uintptr_t rbx_pe_text(HMODULE mod, size_t* out_size);
 extern HMODULE   rbx_pe_find_roblox(void);
@@ -23,7 +24,7 @@ static uintptr_t find_sig(uintptr_t base, size_t size, const sig_t* s)
 {
     size_t plen = strlen(s->mask);
     const uint8_t* mem = (const uint8_t*)base;
-    for (size_t i = 0; i + plen < size; ++i) {
+    for (size_t i = 0; i + plen <= size; ++i) {
         if (match(mem + i, (const uint8_t*)s->pattern, s->mask)) {
             uintptr_t hit = (uintptr_t)(mem + i) + s->offset;
             if (s->rel_add) {

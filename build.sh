@@ -24,17 +24,17 @@ mkdir -p dist
 echo ">> shim64.dll"
 pushd shim >/dev/null
 x86_64-w64-mingw32-gcc \
-  -shared -O2 -static-libgcc -nostdlib \
-  -Wl,--entry=_DllMainCRTStartup \
+  -shared -O2 -static-libgcc \
+  -Wl,--entry=DllMainCRTStartup \
   -o ../dist/shim64.dll \
   shim.c pe.c ldr_unlink.c hooks.c luau_bridge.c pipe.c scan.c \
-  -lkernel32 -lntdll -luser32 -lwininet
+  -lkernel32 -lntdll -luser32 -lwininet -lmsvcrt
 popd >/dev/null
 
 echo ">> rbx-loader.exe"
 pushd loader >/dev/null
 x86_64-w64-mingw32-g++ \
-  -std=c++20 -O2 -static -static-libgcc -static-libstdc++ \
+  -std=c++20 -O2 -static -static-libgcc -static-libstdc++ -municode \
   -o ../dist/rbx-loader.exe \
   loader.cpp manual_map.cpp apc_inject.cpp \
   -lntdll -lkernel32

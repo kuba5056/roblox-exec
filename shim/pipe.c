@@ -1,4 +1,5 @@
 #include "shim.h"
+#include <string.h>
 
 static HANDLE g_log_pipe = INVALID_HANDLE_VALUE;
 

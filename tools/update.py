@@ -27,7 +27,7 @@ def to_mask(pat: str):
 
 def scan(blob: bytes, needle: bytes, mask: bytes) -> list[int]:
     n = len(needle); hits = []
-    for i in range(0, len(blob) - n):
+    for i in range(0, len(blob) - n + 1):
         for j in range(n):
             if mask[j] == ord("x") and blob[i+j] != needle[j]:
                 break

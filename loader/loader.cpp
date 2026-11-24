@@ -11,6 +11,7 @@
 #include <vector>
 #include <cstdio>
 #include <cstdlib>
+#include <cstdint>
 
 extern "C" bool manual_map(HANDLE hProc, const std::vector<uint8_t>& dll,
                            void** out_remote_base, void** out_entry);

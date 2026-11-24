@@ -53,12 +53,12 @@
           src = ./shim;
           buildPhase = ''
             x86_64-w64-mingw32-gcc \
-              -shared -O2 -static-libgcc -nostdlib \
-              -Wl,--entry=_DllMainCRTStartup \
+              -shared -O2 -static-libgcc \
+              -Wl,--entry=DllMainCRTStartup \
               -Wl,--enable-stdcall-fixup \
               -o shim64.dll \
               shim.c pe.c ldr_unlink.c hooks.c luau_bridge.c pipe.c scan.c \
-              -lkernel32 -lntdll -luser32 -lwininet
+              -lkernel32 -lntdll -luser32 -lwininet -lmsvcrt
           '';
           installPhase = ''
             mkdir -p $out/lib
@@ -72,7 +72,7 @@
           src = ./loader;
           buildPhase = ''
             x86_64-w64-mingw32-g++ \
-              -std=c++20 -O2 -static -static-libgcc -static-libstdc++ \
+              -std=c++20 -O2 -static -static-libgcc -static-libstdc++ -municode \
               -o rbx-loader.exe \
               loader.cpp manual_map.cpp apc_inject.cpp \
               -lntdll -lkernel32

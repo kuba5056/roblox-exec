@@ -1,4 +1,6 @@
 #include "shim.h"
+#include <stdio.h>
+#include <string.h>
 
 static lua_State* g_L_main = NULL;
 
