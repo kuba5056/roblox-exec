@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# rbx-exec entrypoint — wraps sober with our loader + shim and
+# launches the gtk4 ui.
+set -euo pipefail
+
+: "${RBX_EXEC_LIB:?RBX_EXEC_LIB not set — install via nix}"
+: "${RBX_EXEC_UI:?RBX_EXEC_UI not set — install via nix}"
+
+HOME_DIR="${HOME:?}"
+PREFIXES=(
+  "$HOME_DIR/.var/app/org.vinegarhq.Sober/data/sober/prefix"
+  "$HOME_DIR/.local/share/sober/prefix"
+)
+
+prefix=""
+for p in "${PREFIXES[@]}"; do
+  [[ -d "$p" ]] && prefix="$p" && break
+done
+if [[ -z "$prefix" ]]; then
+  echo "rbx-exec: sober prefix not found."
+  echo "  flatpak install -y flathub org.vinegarhq.Sober"
+  echo "  flatpak run org.vinegarhq.Sober    # run once to create the prefix"
+  exit 2
+fi
+
+dropin="$prefix/drive_c/rbx-exec"
+mkdir -p "$dropin"
+install -m 0644 "$RBX_EXEC_LIB/shim64.dll"     "$dropin/"
+install -m 0755 "$RBX_EXEC_LIB/rbx-loader.exe" "$dropin/"
+
+cat > "$dropin/pipe-publish.sh" <<'EOF'
+#!/bin/sh
+# Inside sober's flatpak sandbox: publish the named-pipe socket
+# that wine exposes for \\.\pipe\rbx-exec at a known path.
+sock="/run/user/$(id -u)/rbx-exec.sock"
+dst="$WINEPREFIX/drive_c/rbx-exec/rbx-exec.sock"
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  real=$(ls /tmp/.wine-$(id -u)/server-*/socket 2>/dev/null | head -n1)
+  [ -n "$real" ] && ln -sf "$real" "$dst" && exit 0
+  sleep 0.5
+done
+EOF
+chmod +x "$dropin/pipe-publish.sh"
+
+exec "$RBX_EXEC_UI" "$@"

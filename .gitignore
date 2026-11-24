@@ -1,0 +1,12 @@
+/result
+/result-*
+/dist/
+/luau/src/
+/luau/build/
+/ui/target/
+/offsets/offsets.db
+*.o
+*.obj
+*.exe
+*.dll
+.direnv/

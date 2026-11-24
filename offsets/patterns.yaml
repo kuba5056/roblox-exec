@@ -1,0 +1,32 @@
+# rbx-exec — luau VM signature table for RobloxPlayerBeta.exe
+# versioned by player exe sha256; /tools/update.py scans live.
+
+version: 2
+player_sha256: "fill-after-first-dump"
+luau_version:  "0.650"
+
+signatures:
+  luau_load:
+    pattern: "48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 49 8B F0"
+  lua_pcall:
+    pattern: "48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 41 8B E9"
+  lua_pushcclosure:
+    pattern: "48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 41 8B F8"
+  lua_setfield:
+    pattern: "40 53 48 83 EC ?? 49 8B D8 48 8B CA"
+  lua_gettop:
+    pattern: "48 8B 41 ?? 48 2B 41 ?? 48 C1 F8 ?? C3"
+  lua_settop:
+    pattern: "48 8B 41 ?? 4C 8B C2"
+  lua_tolstring:
+    pattern: "48 89 5C 24 ?? 57 48 83 EC ?? 49 8B F8"
+  lua_pushstring:
+    pattern: "48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 49 8B F0 48 8B DA"
+  lua_pushboolean:
+    pattern: "48 8B 41 ?? 89 10"
+  lua_pushinteger:
+    pattern: "48 8B 41 ?? C7 40"
+  lua_newthread:
+    pattern: "40 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24"
+  lua_resume:
+    pattern: "48 89 5C 24 ?? 48 89 74 24 ?? 57 41 56 41 57 48 83 EC"
