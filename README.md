@@ -20,15 +20,24 @@ build.sh           one-shot fallback build outside nix
 
 ```nix
 {
-  imports = [ (builtins.getFlake "github:you/rbx-exec").nixosModules.default ];
+  imports = [ (builtins.getFlake "github:kuba5056/roblox-exec").nixosModules.default ];
   programs.rbx-exec.enable = true;
 }
 ```
 
-Or for a single run without system install:
+One-shot run, always from the latest commit on `main` (the `--refresh` is
+important — nix pins flakes aggressively and will otherwise reuse a stale rev):
 
 ```sh
-nix run github:you/rbx-exec
+nix run github:kuba5056/roblox-exec --refresh
+```
+
+Or clone and build locally:
+
+```sh
+git clone https://github.com/kuba5056/roblox-exec && cd roblox-exec
+nix build .#default
+./result/bin/rbx-exec
 ```
 
 ## dev shell
